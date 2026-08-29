@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Underground GitHub</title>
+  <meta name="description" content="Discover underrated GitHub developers and repositories before everyone else does.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="brand" aria-label="Underground GitHub home">
+        <span class="brand-mark">UG</span>
+        <span>Underground GitHub</span>
+      </a>
+
+      <div class="nav-actions">
+        <a
+          class="nav-link"
+          href="https://github.com/"
+          target="_blank"
+          rel="noreferrer"
+        >GitHub</a>
+
+        <a
+          class="button button-small"
+          href="https://github.com/"
+          target="_blank"
+          rel="noreferrer"
+        >Submit a Repo</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="eyebrow">small projects deserve attention too.</div>
+
+        <h1>Find developers before everyone else does.</h1>
+
+        <p class="hero-copy">
+          Underground GitHub highlights smaller developers building interesting
+          projects across VR, Discord, Python, web development, games, tools,
+          APIs, and more.
+        </p>
+
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/>
+          </svg>
+
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Search developers, repositories, or topics..."
+            aria-label="Search underground repositories"
+          >
+        </div>
+
+        <div class="stats" aria-label="Directory stats">
+          <div>
+            <strong id="repoCount">0</strong>
+            <span>repos</span>
+          </div>
+
+          <span class="stat-divider"></span>
+
+          <div>
+            <strong id="developerCount">0</strong>
+            <span>developers</span>
+          </div>
+
+          <span class="stat-divider"></span>
+
+          <div>
+            <strong id="categoryCount">0</strong>
+            <span>categories</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="directory">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">discover</span>
+            <h2>Underground projects</h2>
+          </div>
+
+          <select id="sortSelect" aria-label="Sort repositories">
+            <option value="featured">Featured</option>
+            <option value="stars-low">Stars: low to high</option>
+            <option value="stars-high">Stars: high to low</option>
+            <option value="updated">Recently updated</option>
+          </select>
+        </div>
+
+        <div id="categoryFilters" class="filters"></div>
+
+        <div id="repoGrid" class="repo-grid" aria-live="polite"></div>
+
+        <div id="emptyState" class="empty-state" hidden>
+          <span>:(</span>
+          <h3>No repos found</h3>
+          <p>Try another search or category.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="container about-grid">
+        <div>
+          <span class="section-label">why this exists</span>
+          <h2>Good projects should not need thousands of stars to be seen.</h2>
+        </div>
+
+        <p>
+          This directory is built for smaller developers who are still growing.
+          Projects are selected for being active, interesting, and useful —
+          not because they are already popular.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>Underground GitHub</span>
+      <span>Built for developers still on the come up.</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
