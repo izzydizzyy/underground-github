@@ -1,0 +1,49 @@
+name: Discover underground repos
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "17 6 * * *"
+
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/discover.py"
+      - ".github/workflows/discover.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Discover repositories
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/discover.py
+
+      - name: Commit updated directory
+        run: |
+          if git diff --quiet -- data/developers.json; then
+            echo "No repository changes found."
+            exit 0
+          fi
+
+          git config user.name "underground-github[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/developers.json
+          git commit -m "update underground repos"
+          git push
