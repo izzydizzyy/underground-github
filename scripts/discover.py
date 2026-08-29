@@ -14,43 +14,37 @@ OUTPUT = Path("data/developers.json")
 MAX_STARS = 25
 PER_CATEGORY = 6
 ACTIVE_DAYS = 180
+SEARCH_PAUSE = 5
 
 CATEGORIES = {
-    "VR": [
-        "vr",
-        '"virtual reality"',
-        '"meta quest"',
-    ],
-    "Discord": [
-        "discord",
-        '"discord bot"',
-        "discord.py",
-    ],
-    "Python": [
-        "python",
-        "pyqt",
-        "tkinter",
-    ],
-    "Web": [
-        '"web app"',
-        "website",
-        "frontend",
-    ],
-    "Games": [
-        "game",
-        "pygame",
-        "godot",
-    ],
-    "Tools": [
-        "tool",
-        "cli",
-        "utility",
-    ],
-    "APIs": [
-        "api",
-        '"rest api"',
-        "fastapi",
-    ],
+    "VR": {
+        "search": "vr",
+        "terms": ["vr", "virtual reality", "meta quest", "unity xr", "openxr"],
+    },
+    "Discord": {
+        "search": "discord",
+        "terms": ["discord", "discord bot", "discord.py", "discord.js"],
+    },
+    "Python": {
+        "search": "python",
+        "terms": ["python", "pyqt", "tkinter", "fastapi", "flask"],
+    },
+    "Web": {
+        "search": '"web app"',
+        "terms": ["web app", "website", "frontend", "web", "react"],
+    },
+    "Games": {
+        "search": "game",
+        "terms": ["game", "pygame", "godot", "unity", "gamedev"],
+    },
+    "Tools": {
+        "search": "cli",
+        "terms": ["cli", "tool", "utility", "developer tool", "automation"],
+    },
+    "APIs": {
+        "search": "api",
+        "terms": ["api", "rest api", "fastapi", "backend", "endpoint"],
+    },
 }
 
 BLOCKED_WORDS = {
@@ -67,7 +61,7 @@ BLOCKED_WORDS = {
 }
 
 
-def request_json(url):
+def request_json(url, retries=3):
     headers = {
         "Accept": "application/vnd.github+json",
         "User-Agent": "underground-github",
@@ -77,24 +71,44 @@ def request_json(url):
     if TOKEN:
         headers["Authorization"] = f"Bearer {TOKEN}"
 
-    request = Request(url, headers=headers)
+    for attempt in range(retries):
+        request = Request(url, headers=headers)
 
-    try:
-        with urlopen(request, timeout=20) as response:
-            return json.loads(response.read().decode("utf-8"))
-    except HTTPError as error:
-        if error.code == 404:
-            return None
+        try:
+            with urlopen(request, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
 
-        body = error.read().decode("utf-8", errors="replace")
-        raise RuntimeError(
-            f"GitHub API error {error.code}: {body}"
-        ) from error
+        except HTTPError as error:
+            body = error.read().decode("utf-8", errors="replace")
+
+            if error.code == 404:
+                return None
+
+            if error.code == 403 and attempt < retries - 1:
+                retry_after = error.headers.get("Retry-After")
+
+                if retry_after and retry_after.isdigit():
+                    wait = int(retry_after)
+                else:
+                    wait = 20 * (attempt + 1)
+
+                print(
+                    f"[rate limit] waiting {wait}s before retry "
+                    f"{attempt + 2}/{retries}"
+                )
+                time.sleep(wait)
+                continue
+
+            raise RuntimeError(
+                f"GitHub API error {error.code}: {body}"
+            ) from error
+
+    return None
 
 
-def github_search(category, term, cutoff):
+def github_search(category, search_term, cutoff):
     query = (
-        f"{term} in:name,description,readme "
+        f"{search_term} in:name,description,readme "
         f"stars:0..{MAX_STARS} "
         f"pushed:>={cutoff} "
         "fork:false archived:false"
@@ -105,24 +119,15 @@ def github_search(category, term, cutoff):
         f"?q={quote(query)}"
         "&sort=updated"
         "&order=desc"
-        "&per_page=25"
+        "&per_page=30"
     )
 
     data = request_json(url) or {}
     items = data.get("items", [])
 
-    print(f"[{category}] {term}: {len(items)} results")
-    time.sleep(1)
+    print(f"[{category}] {len(items)} results")
 
     return items
-
-
-def has_readme(repo):
-    owner = repo["owner"]["login"]
-    name = repo["name"]
-    url = f"{API}/repos/{owner}/{name}/readme"
-
-    return request_json(url) is not None
 
 
 def looks_low_quality(repo):
@@ -160,8 +165,8 @@ def match_score(repo, terms):
 
     score = 0
 
-    for raw_term in terms:
-        term = raw_term.replace('"', "").lower()
+    for term in terms:
+        term = term.lower()
 
         if term in name:
             score += 8
@@ -173,21 +178,22 @@ def match_score(repo, terms):
             score += 5
 
     stars = repo.get("stargazers_count", 0)
-    forks = repo.get("forks_count", 0)
 
     if 1 <= stars <= 5:
         score += 4
     elif stars <= 12:
         score += 2
 
-    if forks > 0:
+    if repo.get("forks_count", 0) > 0:
         score += 1
 
     pushed = repo.get("pushed_at")
+
     if pushed:
         pushed_date = datetime.fromisoformat(
             pushed.replace("Z", "+00:00")
         )
+
         age = datetime.now(timezone.utc) - pushed_date
 
         if age.days <= 30:
@@ -218,43 +224,32 @@ def normalize(repo, category):
     }
 
 
-def discover_category(category, terms, cutoff):
-    found = {}
+def discover_category(category, config, cutoff):
+    repos = github_search(
+        category,
+        config["search"],
+        cutoff,
+    )
 
-    for term in terms:
-        for repo in github_search(category, term, cutoff):
-            if looks_low_quality(repo):
-                continue
-
-            key = repo["full_name"].lower()
-            found[key] = repo
+    filtered = [
+        repo
+        for repo in repos
+        if not looks_low_quality(repo)
+    ]
 
     ranked = sorted(
-        found.values(),
+        filtered,
         key=lambda repo: (
-            -match_score(repo, terms),
+            -match_score(repo, config["terms"]),
             repo.get("stargazers_count", 0),
             repo["name"].lower(),
         ),
     )
 
-    selected = []
-
-    for repo in ranked:
-        if len(selected) >= PER_CATEGORY:
-            break
-
-        try:
-            if not has_readme(repo):
-                continue
-        except RuntimeError as error:
-            print(f"[warn] README check failed: {error}")
-            continue
-
-        selected.append(normalize(repo, category))
-        time.sleep(0.15)
-
-    return selected
+    return [
+        normalize(repo, category)
+        for repo in ranked[:PER_CATEGORY]
+    ]
 
 
 def mark_featured(repos):
@@ -277,21 +272,36 @@ def mark_featured(repos):
 
 def main():
     cutoff = (
-        datetime.now(timezone.utc) - timedelta(days=ACTIVE_DAYS)
+        datetime.now(timezone.utc)
+        - timedelta(days=ACTIVE_DAYS)
     ).date().isoformat()
 
     all_repos = []
     seen_urls = set()
 
-    for category, terms in CATEGORIES.items():
+    for index, (category, config) in enumerate(CATEGORIES.items()):
         print(f"\n--- {category} ---")
 
-        for repo in discover_category(category, terms, cutoff):
+        try:
+            discovered = discover_category(
+                category,
+                config,
+                cutoff,
+            )
+        except RuntimeError as error:
+            print(f"[warn] skipped {category}: {error}")
+            discovered = []
+
+        for repo in discovered:
             if repo["repo_url"] in seen_urls:
                 continue
 
             seen_urls.add(repo["repo_url"])
             all_repos.append(repo)
+
+        if index < len(CATEGORIES) - 1:
+            print(f"[pause] waiting {SEARCH_PAUSE}s")
+            time.sleep(SEARCH_PAUSE)
 
     mark_featured(all_repos)
 
@@ -304,13 +314,23 @@ def main():
         )
     )
 
+    if not all_repos:
+        raise RuntimeError(
+            "No repositories were discovered. "
+            "Keeping the current developers.json unchanged."
+        )
+
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+
     OUTPUT.write_text(
         json.dumps(all_repos, indent=2),
         encoding="utf-8",
     )
 
-    print(f"\nSaved {len(all_repos)} repos to {OUTPUT}")
+    print(
+        f"\nSaved {len(all_repos)} repos "
+        f"to {OUTPUT}"
+    )
 
 
 if __name__ == "__main__":
