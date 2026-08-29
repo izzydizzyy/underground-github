@@ -1,59 +1,151 @@
 [
   {
-    "developer": "Demo Developer",
-    "username": "demo-dev",
-    "avatar": "https://github.com/identicons/demo-dev.png",
-    "name": "quest-vr-tools",
-    "description": "A small toolkit for experimenting with Meta Quest and VR activity data.",
+    "developer": "kravishan",
+    "username": "kravishan",
+    "avatar": "https://github.com/kravishan.png",
+    "name": "The-Scope-and-Grabbing",
+    "description": "A Unity VR project featuring a magnifying lens and a two-handed grabbing system.",
     "category": "VR",
-    "language": "Python",
+    "language": "C#",
+    "stars": 1,
+    "topics": [
+      "unity3d",
+      "virtual-reality",
+      "xr"
+    ],
+    "featured": true,
+    "profile_url": "https://github.com/kravishan",
+    "repo_url": "https://github.com/kravishan/The-Scope-and-Grabbing"
+  },
+  {
+    "developer": "37743",
+    "username": "37743",
+    "avatar": "https://github.com/37743.png",
+    "name": "IMTAI-VR",
+    "description": "A Unity-based VR industrial training system using agentic AI, RAG, speech, and Meta Quest.",
+    "category": "VR",
+    "language": "C#",
     "stars": 2,
     "topics": [
       "vr",
+      "unity",
       "meta-quest",
-      "python"
+      "agentic-ai"
     ],
-    "updated": "2026-08-26T18:30:00Z",
     "featured": true,
-    "profile_url": "https://github.com/",
-    "repo_url": "https://github.com/"
+    "profile_url": "https://github.com/37743",
+    "repo_url": "https://github.com/37743/IMTAI-VR"
   },
   {
-    "developer": "Example Builder",
-    "username": "example-builder",
-    "avatar": "https://github.com/identicons/example-builder.png",
-    "name": "tiny-discord-tools",
-    "description": "Small utilities for Discord server owners and bot developers.",
+    "developer": "cxllm",
+    "username": "cxllm",
+    "avatar": "https://github.com/cxllm.png",
+    "name": "corynth",
+    "description": "A small open-source Discord bot built around slash commands.",
     "category": "Discord",
     "language": "JavaScript",
-    "stars": 5,
+    "stars": 2,
     "topics": [
       "discord",
-      "discordjs",
-      "tools"
+      "discord-bot",
+      "discord-js"
     ],
-    "updated": "2026-08-24T14:00:00Z",
-    "featured": false,
-    "profile_url": "https://github.com/",
-    "repo_url": "https://github.com/"
+    "featured": true,
+    "profile_url": "https://github.com/cxllm",
+    "repo_url": "https://github.com/cxllm/corynth"
   },
   {
-    "developer": "Sample Coder",
-    "username": "sample-coder",
-    "avatar": "https://github.com/identicons/sample-coder.png",
-    "name": "mini-api-status",
-    "description": "A lightweight status page for tiny APIs and side projects.",
+    "developer": "tanmay-0017",
+    "username": "tanmay-0017",
+    "avatar": "https://github.com/tanmay-0017.png",
+    "name": "Sleep_Tracker-Rest-API",
+    "description": "A Node.js and Express REST API for storing and retrieving sleep tracking data.",
     "category": "APIs",
-    "language": "HTML",
+    "language": "JavaScript",
+    "stars": 2,
+    "topics": [
+      "rest-api",
+      "nodejs",
+      "express",
+      "testing"
+    ],
+    "featured": false,
+    "profile_url": "https://github.com/tanmay-0017",
+    "repo_url": "https://github.com/tanmay-0017/Sleep_Tracker-Rest-API"
+  },
+  {
+    "developer": "sroehrl",
+    "username": "sroehrl",
+    "avatar": "https://github.com/sroehrl.png",
+    "name": "theGame",
+    "description": "ResourceMeJS, a JavaScript idle game made for coders.",
+    "category": "Games",
+    "language": "JavaScript",
+    "stars": 3,
+    "topics": [
+      "coding-challenge",
+      "game",
+      "javascript"
+    ],
+    "featured": false,
+    "profile_url": "https://github.com/sroehrl",
+    "repo_url": "https://github.com/sroehrl/theGame"
+  },
+  {
+    "developer": "khan-rehan",
+    "username": "khan-rehan",
+    "avatar": "https://github.com/khan-rehan.png",
+    "name": "Musify",
+    "description": "A music web app with accounts, albums, playlists, search, and a built-in player.",
+    "category": "Web",
+    "language": "PHP",
     "stars": 1,
     "topics": [
-      "api",
-      "status-page",
-      "github-pages"
+      "web-app",
+      "music",
+      "php",
+      "mysql"
     ],
-    "updated": "2026-08-27T09:15:00Z",
+    "featured": false,
+    "profile_url": "https://github.com/khan-rehan",
+    "repo_url": "https://github.com/khan-rehan/Musify"
+  },
+  {
+    "developer": "hanzila1",
+    "username": "hanzila1",
+    "avatar": "https://github.com/hanzila1.png",
+    "name": "satellite-image-explorer",
+    "description": "A Python-based desktop tool for exploring and analyzing satellite imagery.",
+    "category": "Python",
+    "language": "Python",
+    "stars": 1,
+    "topics": [
+      "python",
+      "satellite-imagery",
+      "analysis",
+      "visualization"
+    ],
     "featured": true,
-    "profile_url": "https://github.com/",
-    "repo_url": "https://github.com/"
+    "profile_url": "https://github.com/hanzila1",
+    "repo_url": "https://github.com/hanzila1/satellite-image-explorer"
+  },
+  {
+    "developer": "YusufB5",
+    "username": "YusufB5",
+    "avatar": "https://github.com/YusufB5.png",
+    "name": "ASCILINE-Mascots",
+    "description": "A zero-dependency DOM kinematics engine for interactive ASCII and pixel-art mascots.",
+    "category": "Tools",
+    "language": "JavaScript",
+    "stars": 2,
+    "topics": [
+      "developer-tools",
+      "javascript",
+      "ascii",
+      "pixel-art"
+    ],
+    "featured": true,
+    "profile_url": "https://github.com/YusufB5",
+    "repo_url": "https://github.com/YusufB5/ASCILINE-Mascots"
   }
 ]
