@@ -1,0 +1,59 @@
+[
+  {
+    "developer": "Demo Developer",
+    "username": "demo-dev",
+    "avatar": "https://github.com/identicons/demo-dev.png",
+    "name": "quest-vr-tools",
+    "description": "A small toolkit for experimenting with Meta Quest and VR activity data.",
+    "category": "VR",
+    "language": "Python",
+    "stars": 2,
+    "topics": [
+      "vr",
+      "meta-quest",
+      "python"
+    ],
+    "updated": "2026-08-26T18:30:00Z",
+    "featured": true,
+    "profile_url": "https://github.com/",
+    "repo_url": "https://github.com/"
+  },
+  {
+    "developer": "Example Builder",
+    "username": "example-builder",
+    "avatar": "https://github.com/identicons/example-builder.png",
+    "name": "tiny-discord-tools",
+    "description": "Small utilities for Discord server owners and bot developers.",
+    "category": "Discord",
+    "language": "JavaScript",
+    "stars": 5,
+    "topics": [
+      "discord",
+      "discordjs",
+      "tools"
+    ],
+    "updated": "2026-08-24T14:00:00Z",
+    "featured": false,
+    "profile_url": "https://github.com/",
+    "repo_url": "https://github.com/"
+  },
+  {
+    "developer": "Sample Coder",
+    "username": "sample-coder",
+    "avatar": "https://github.com/identicons/sample-coder.png",
+    "name": "mini-api-status",
+    "description": "A lightweight status page for tiny APIs and side projects.",
+    "category": "APIs",
+    "language": "HTML",
+    "stars": 1,
+    "topics": [
+      "api",
+      "status-page",
+      "github-pages"
+    ],
+    "updated": "2026-08-27T09:15:00Z",
+    "featured": true,
+    "profile_url": "https://github.com/",
+    "repo_url": "https://github.com/"
+  }
+]
