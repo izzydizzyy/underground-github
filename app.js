@@ -20,20 +20,6 @@ function escapeHTML(value = "") {
     .replaceAll("'", "&#039;");
 }
 
-function formatDate(dateValue) {
-  const date = new Date(dateValue);
-
-  if (Number.isNaN(date.getTime())) {
-    return "unknown";
-  }
-
-  return new Intl.DateTimeFormat("en", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  }).format(date);
-}
-
 function repoCard(repo) {
   const topics = (repo.topics || [])
     .slice(0, 4)
@@ -72,15 +58,23 @@ function repoCard(repo) {
 
       <div class="repo-footer">
         <span class="repo-meta">
-          ${escapeHTML(repo.language || "Unknown")} · updated ${formatDate(repo.updated)}
+          ${escapeHTML(repo.language || "Unknown")} · underground pick
         </span>
 
         <div class="repo-links">
-          <a href="${escapeHTML(repo.profile_url)}" target="_blank" rel="noreferrer">
+          <a
+            href="${escapeHTML(repo.profile_url)}"
+            target="_blank"
+            rel="noreferrer"
+          >
             Profile
           </a>
 
-          <a href="${escapeHTML(repo.repo_url)}" target="_blank" rel="noreferrer">
+          <a
+            href="${escapeHTML(repo.repo_url)}"
+            target="_blank"
+            rel="noreferrer"
+          >
             Repository ↗
           </a>
         </div>
@@ -141,8 +135,8 @@ function getFilteredRepos() {
       filtered.sort((a, b) => b.stars - a.stars);
       break;
 
-    case "updated":
-      filtered.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+    case "name":
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
       break;
 
     default:
@@ -151,8 +145,9 @@ function getFilteredRepos() {
           return Number(b.featured) - Number(a.featured);
         }
 
-        return new Date(b.updated) - new Date(a.updated);
+        return a.name.localeCompare(b.name);
       });
+
       break;
   }
 
@@ -184,6 +179,7 @@ categoryFilters.addEventListener("click", event => {
   }
 
   currentCategory = button.dataset.category;
+
   renderCategories();
   renderRepos();
 });
@@ -208,7 +204,10 @@ async function loadRepos() {
     console.error("Could not load repository data:", error);
 
     emptyState.hidden = false;
-    emptyState.querySelector("h3").textContent = "Could not load repo data";
+
+    emptyState.querySelector("h3").textContent =
+      "Could not load repo data";
+
     emptyState.querySelector("p").textContent =
       "Check data/developers.json and try again.";
   }
